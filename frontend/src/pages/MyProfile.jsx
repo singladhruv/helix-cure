@@ -44,7 +44,7 @@ const MyProfile = () => {
       {/* Header with Avatar */}
       <div className="flex items-center gap-3 mb-6">
         <div className="relative">
-          <label htmlFor="image" className="cursor-pointer">
+          <label htmlFor="image" className={isEdit ? "cursor-pointer" : "cursor-disabled"}>
             <img
               src={image ? URL.createObjectURL(image) : userData.image}
               alt="Profile"
@@ -55,7 +55,7 @@ const MyProfile = () => {
                 <FiEdit2 className="text-gray-600 text-xs" />
               </div>
             )}
-            <input type="file" id="image" hidden onChange={(e) => setImage(e.target.files[0])} />
+            <input type="file" id="image" accept="image/*" disabled={!isEdit} hidden onChange={(e) => {if(isEdit) setImage(e.target.files[0])}} />
           </label>
         </div>
         <div>

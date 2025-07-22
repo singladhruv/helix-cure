@@ -11,15 +11,6 @@ const DoctorProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [inputimage, setImage] = useState(false);
 
-const onImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && !file.type.startsWith("image/")) {
-        toast.error("Only image files are allowed!");
-        return;
-    }
-    setDocImg(file);
-};
-
   const updateProfile = async () => {
     try {
       const formData = new FormData();
@@ -63,7 +54,7 @@ const onImageChange = (e) => {
       {/* Header with Avatar */}
       <div className="flex items-center gap-3 mb-6">
         <div className="relative">
-          <label htmlFor="image" className="cursor-pointer">
+          <label htmlFor="image" className={isEdit ? "cursor-pointer" : "cursor-disabled"}>
             <img
               src={inputimage ? URL.createObjectURL(inputimage) : profileData.image}
               alt="Doctor"
@@ -74,7 +65,7 @@ const onImageChange = (e) => {
                 <FiEdit2 className="text-gray-600 text-xs" />
               </div>
             )}
-            <input type="file" id="image" hidden  onChange={onImageChange} />
+            <input type="file" id="image" hidden accept="image/*" disabled={!isEdit} onChange= {(e) => {if(isEdit) setImage(e.target.files[0])}} />
           </label>
         </div>
         <div>
