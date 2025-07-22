@@ -22,14 +22,20 @@ const AddDoctor = () => {
     const { backendUrl } = useContext(AppContext)
     const { aToken } = useContext(AdminContext)
 
+    const onImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && !file.type.startsWith("image/")) {
+        toast.error("Only image files are allowed!");
+        return;
+    }
+    setDocImg(file);
+}
+
     const onSubmitHandler = async (event) => {
         event.preventDefault()
-
         try {
-
-            if (!docImg) {
-                return toast.error('Image Not Selected')
-            }
+            if (!docImg)
+            return toast.error('Image Not Selected')
 
             const formData = new FormData();
 
@@ -43,11 +49,6 @@ const AddDoctor = () => {
             formData.append('speciality', speciality)
             formData.append('degree', degree)
             formData.append('address', JSON.stringify({ line1: address1, line2: address2 }))
-
-            // console log formdata            
-            formData.forEach((value, key) => {
-                console.log(`${key}: ${value}`);
-            });
 
             const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
             if (data.success) {
@@ -66,8 +67,17 @@ const AddDoctor = () => {
             }
 
         } catch (error) {
-            toast.error(error.message)
-            console.log(error)
+             if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message &&
+                error.response.data.message.toLowerCase().includes("only image")
+            ) {
+                toast.error("Only image files are allowed!");
+            } else {
+                toast.error(error.message || "Upload failed. Try again.");
+            }
+            console.log(error);
         }
 
     }
@@ -82,7 +92,7 @@ const AddDoctor = () => {
                     <label htmlFor="doc-img">
                         <img className='w-16 bg-gray-100 rounded-full cursor-pointer' src={docImg ? URL.createObjectURL(docImg) : assets.upload_area} alt="" />
                     </label>
-                    <input onChange={(e) => setDocImg(e.target.files[0])} type="file" name="" id="doc-img" hidden />
+                    <input onChange= {onImageChange} type="file" name="" id="doc-img" hidden />
                     <p>Upload Doctor <br /> picture</p>
                 </div>
 

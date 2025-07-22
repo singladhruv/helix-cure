@@ -11,6 +11,15 @@ const DoctorProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [inputimage, setImage] = useState(false);
 
+const onImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && !file.type.startsWith("image/")) {
+        toast.error("Only image files are allowed!");
+        return;
+    }
+    setDocImg(file);
+};
+
   const updateProfile = async () => {
     try {
       const formData = new FormData();
@@ -23,16 +32,9 @@ const DoctorProfile = () => {
       formData.append('fees', profileData.fees);
       formData.append('available', profileData.available);
       formData.append('address', profileData.address);
-
-      if (inputimage) {
-        formData.append('image', inputimage);
-      }
-
-      const { data } = await axios.post(
-        backendUrl + '/api/doctor/update-profile',
-        formData,
-        { headers: { dToken } }
-      );
+      if(inputimage) formData.append('image', inputimage);
+      
+      const { data } = await axios.post(backendUrl + '/api/doctor/update-profile',formData,{ headers: { dToken } });
 
       if (data.success) {
         toast.success(data.message);
@@ -72,7 +74,7 @@ const DoctorProfile = () => {
                 <FiEdit2 className="text-gray-600 text-xs" />
               </div>
             )}
-            <input type="file" id="image" hidden onChange={(e) => setImage(e.target.files[0])} />
+            <input type="file" id="image" hidden  onChange={onImageChange} />
           </label>
         </div>
         <div>
@@ -192,7 +194,7 @@ const DoctorProfile = () => {
               className="w-full outline-none bg-gray-50"
             />
           ) : (
-            <p className="text-gray-800 mt-1">{profileData.address}</p>
+            <p className="text-gray-800 mt-1">{profileData.address || "No address provided"}</p>
           )}
         </div>
 

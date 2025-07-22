@@ -111,18 +111,15 @@ const updateProfile = async (req, res) => {
             return res.json({ success: false, message: "Data Missing" })
         }
 
-        await userModel.findByIdAndUpdate(userId, { name, phone, address: JSON.parse(address), dob, gender })
+        const updateData = {name,phone,dob,gender,...(address && { address: JSON.parse(address) })};
 
         if (imageFile) {
-
-            // upload image to cloudinary
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-            const imageURL = imageUpload.secure_url
-
-            await userModel.findByIdAndUpdate(userId, { image: imageURL })
+            const { secure_url } = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
+            updateData.image = secure_url;
         }
 
-        res.json({ success: true, message: 'Profile Updated' })
+        await userModel.findByIdAndUpdate(userId, updateData, { new: true });
+        res.json({ success: true, message: 'Profile updated' });
 
     } catch (error) {
         console.log(error)
@@ -138,13 +135,14 @@ const bookAppointment = async (req, res) => {
         const { userId, docId, slotDate, slotTime } = req.body
         const docData = await doctorModel.findById(docId).select("-password")
 
+        //check doctor availability
         if (!docData.available) {
             return res.json({ success: false, message: 'Doctor Not Available' })
         }
 
         let slots_booked = docData.slots_booked
 
-        // checking for slot availablity 
+        // checking for slot date and time availablity 
         if (slots_booked[slotDate]) {
             if (slots_booked[slotDate].includes(slotTime)) {
                 return res.json({ success: false, message: 'Slot Not Available' })
@@ -161,6 +159,7 @@ const bookAppointment = async (req, res) => {
 
         delete docData.slots_booked
 
+        //creating appointment data
         const appointmentData = {
             userId,
             docId,
@@ -171,7 +170,7 @@ const bookAppointment = async (req, res) => {
             slotDate,
             date: Date.now()
         }
-
+        
         const newAppointment = new appointmentModel(appointmentData)
         await newAppointment.save()
 

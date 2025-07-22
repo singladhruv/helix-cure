@@ -137,22 +137,29 @@ const doctorProfile = async (req, res) => {
 // API to update doctor profile data from  Doctor Panel
 const updateDoctorProfile = async (req, res) => {
     try {
-        const {docId, fees, address, available, about, name, degree, experience} = req.body;
+        const { docId, fees, address, available, about, name, degree, experience } = req.body;
         const imageFile = req.file;
 
-        await doctorModel.findByIdAndUpdate(docId, { fees, address, available, about, name, degree, experience })
+        const updateFields = {
+            ...(fees && { fees }),
+            ...(address && { address }),
+            ...(available && { available }),
+            ...(about && { about }),
+            ...(name && { name }),
+            ...(degree && { degree }),
+            ...(experience && { experience }),
+        };
 
         if (imageFile) {
-            // upload image to cloudinary
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-            const imageURL = imageUpload.secure_url
-        
-            await doctorModel.findByIdAndUpdate(docId, { image: imageURL })
+            // Upload image to Cloudinary
+            const { secure_url } = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
+            updateFields.image = secure_url;
         }
 
-        res.json({ success: true, message: 'Profile Updated' })
+        await doctorModel.findByIdAndUpdate(docId, updateFields, { new: true });
 
-    } catch (error) {
+        res.json({ success: true, message: 'Profile Updated' });
+    }catch(error) {
         console.log(error)
         res.json({ success: false, message: error.message })
     }
@@ -163,9 +170,7 @@ const doctorDashboard = async (req, res) => {
     try {
 
         const { docId } = req.body
-
         const appointments = await appointmentModel.find({ docId })
-
         let earnings = 0
 
         appointments.map((item) => {
@@ -181,8 +186,6 @@ const doctorDashboard = async (req, res) => {
                 patients.push(item.userId)
             }
         })
-
-
 
         const dashData = {
             earnings,

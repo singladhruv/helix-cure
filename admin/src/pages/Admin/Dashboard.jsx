@@ -16,7 +16,7 @@ const Dashboard = () => {
   }, [aToken])
 
   // are you sure you want to cancel appointment page(sweetalert2)
-      const handleCancelClick = (appointmentId, cancelAppointment) => {
+      const handleCancelClick = (appointmentId) => {
         Swal.fire({
           title: 'Are you sure?',
           text: 'Do you really want to cancel this appointment?',
@@ -29,6 +29,7 @@ const Dashboard = () => {
           if (result.isConfirmed) {
             cancelAppointment(appointmentId);
             Swal.fire('Cancelled!', 'The appointment has been cancelled.', 'success');
+            getDashData();
           }
         });
       };
@@ -73,7 +74,7 @@ const Dashboard = () => {
                 <p className='text-gray-800 font-medium'>{item.docData.name}</p>
                 <p className='text-gray-600 '>Booking on {slotDateFormat(item.slotDate)}</p>
               </div>
-              {item.cancelled ? <p className='text-red-400 text-xs font-medium'>Cancelled</p> : item.isCompleted ? <p className='text-green-500 text-xs font-medium'>Completed</p> : <img onClick={() => handleCancelClick(item._id,cancelAppointment)}  className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />}
+              {item.cancelled ? <p className='text-red-400 text-xs font-medium'>Cancelled</p> : item.isCompleted ? <p className='text-green-500 text-xs font-medium'>Completed</p> : <img onClick={() => handleCancelClick(item._id)}  className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />}
             </div>
           ))}
         </div>

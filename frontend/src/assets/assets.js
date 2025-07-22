@@ -30,9 +30,6 @@ import doc12 from './doc12.png'
 import doc13 from './doc13.png'
 import doc14 from './doc14.png'
 import doc15 from './doc15.png'
-// import doc16 from './doc16.jpg'
-// import doc17 from './doc17.jpg'
-// import doc18 from './doc18.jpg'
 import Dermatologist from './Dermatologist.svg'
 import Gastroenterologist from './Gastroenterologist.svg'
 import General_physician from './General_physician.svg'
@@ -299,46 +296,4 @@ export const doctors = [
             line2: 'Pune, Maharashtra'
         }
     }
-    // {
-    //     _id: 'doc16',
-    //     name: 'Dr. Harshita Ghosh',
-    //     image: doc16,
-    //     speciality: 'Cardiologist',
-    //     degree: 'MBBS, MD (Cardiology)',
-    //     experience: '6 Years',
-    //     about: 'Dr. Harshita is a seasoned cardiologist known for her expertise in managing complex cardiac conditions and preventive heart care.',
-    //     fees: 700,
-    //     address: {
-    //         line1: 'Salt Lake Sector V',
-    //         line2: 'Kolkata, West Bengal'
-    //     }
-    // },
-    // {
-    //     _id: 'doc17',
-    //     name: 'Dr. Aman Thakur',
-    //     image: doc17,
-    //     speciality: 'Orthopedic Surgeon',
-    //     degree: 'MBBS, MS (Ortho)',
-    //     experience: '5 Years',
-    //     about: 'Dr. Aman specializes in joint replacement surgeries and sports injuries, and emphasizes minimally invasive treatments.',
-    //     fees: 650,
-    //     address: {
-    //         line1: 'Sector 15',
-    //         line2: 'Faridabad, Haryana'
-    //     }
-    // },
-    // {
-    //     _id: 'doc18',
-    //     name: 'Dr. Nivedita Rao',
-    //     image: doc18,
-    //     speciality: 'Psychiatrist',
-    //     degree: 'MBBS, MD (Psychiatry)',
-    //     experience: '7 Years',
-    //     about: 'Dr. Nivedita helps individuals manage stress, anxiety, and other mental health conditions with a blend of therapy and modern psychiatry.',
-    //     fees: 600,
-    //     address: {
-    //         line1: 'Ashok Nagar',
-    //         line2: 'Bhubaneswar, Odisha'
-    //     }
-    // }
 ];

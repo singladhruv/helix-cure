@@ -22,7 +22,7 @@ const DoctorAppointments = () => {
   }, [dToken])
 
   // are you sure you want to cancel appointment page(sweetalert2)
-  const handleCancelClick = (appointmentId, cancelAppointment) => {
+  const handleCancelClick = (appointmentId) => {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you really want to cancel this appointment?',
@@ -35,6 +35,7 @@ const DoctorAppointments = () => {
       if (result.isConfirmed) {
         cancelAppointment(appointmentId);
         Swal.fire('Cancelled!', 'The appointment has been cancelled.', 'success');
+        getAppointments();
       }
     });
   };
@@ -96,7 +97,7 @@ const DoctorAppointments = () => {
                 <div className='text-center'>
               <div className='flex flex-col gap-2'>
                 <div className='flex gap2'>
-                  <img onClick={() => handleCancelClick(item._id,cancelAppointment)} className='w-8 cursor-pointer' src={assets.cancel_icon} alt="Cancel" />
+                  <img onClick={() => handleCancelClick(item._id)} className='w-8 cursor-pointer' src={assets.cancel_icon} alt="Cancel" />
                   <img onClick={() => completeAppointment(item._id)} className='w-8 cursor-pointer' src={assets.tick_icon} alt="Complete" />
                 </div>
                 {item.payment && <button onClick ={() => handleJoinMeet(item._id)} className='text-[#0a0a0a] text-xs px-3 py-1 border rounded hover:bg-primary hover:text-white transition-all duration-300'>Join Meeting</button>}
