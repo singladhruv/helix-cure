@@ -12,5 +12,5 @@ adminRouter.post("/cancel-appointment", authAdmin, appointmentCancel)
 adminRouter.get("/all-doctors", authAdmin, allDoctors)
 adminRouter.post("/change-availability", authAdmin, changeAvailablity)
 adminRouter.get("/dashboard", authAdmin, adminDashboard)
-
+// added route
 export default adminRouter;
